@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="329beffe-f713-4e03-be1f-1abff529acdf" name="Changes" comment="added test request, categories_request.py, roles_request.py">
+    <list default="true" id="329beffe-f713-4e03-be1f-1abff529acdf" name="Changes" comment="feat base endpoints">
+      <change afterPath="$PROJECT_DIR$/app_requests/main_requests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/categories_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app_requests/categories_request.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/roles_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app_requests/roles_request.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/test_request.py" beforeDir="false" afterPath="$PROJECT_DIR$/app_requests/test_request.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781118088417</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="feat base endpoints">
+      <option name="closed" value="true" />
+      <created>1781171557934</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1781171557934</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -226,6 +238,7 @@
     <MESSAGE value="feat .env and .gitignore" />
     <MESSAGE value="test .env" />
     <MESSAGE value="added test request, categories_request.py, roles_request.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="added test request, categories_request.py, roles_request.py" />
+    <MESSAGE value="feat base endpoints" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat base endpoints" />
   </component>
 </project>
