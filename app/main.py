@@ -1,14 +1,10 @@
-import os
 from contextlib import asynccontextmanager
 from typing import Annotated
 
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import Field
 
 from app_requests.main_requests import get_categories, get_roles_by_category_id
-
-load_dotenv()
 
 
 @asynccontextmanager
@@ -51,3 +47,8 @@ def show_roles(category_id: Annotated[str | None, Field(..., min_length=1, max_l
 @app.get("/parameters")
 def show_parameters():
     return app.state.acceptable_parameters
+
+
+@app.get("/search")
+def search():
+    pass
