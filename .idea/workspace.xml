@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="329beffe-f713-4e03-be1f-1abff529acdf" name="Changes" comment="moved api requests to a separate file">
+    <list default="true" id="329beffe-f713-4e03-be1f-1abff529acdf" name="Changes" comment="added exception handling">
+      <change afterPath="$PROJECT_DIR$/app_requests/area_request.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/params.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app_requests/main_requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/app_requests/main_requests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,25 +48,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "Python.categories_requests.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.main_requests.executor": "Run",
-    "Python.roles_request.executor": "Run",
-    "Python.test_requests.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;Python.area_request.executor&quot;: &quot;Run&quot;,
+    &quot;Python.categories_requests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_requests.executor&quot;: &quot;Run&quot;,
+    &quot;Python.roles_request.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_requests.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Projects\job_search_engine\requests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_requests">
-    <configuration name="categories_request" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.area_request">
+    <configuration name="area_request" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="job_search_engine" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -72,11 +76,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/requests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app_requests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Projects\job_search_engine\requests\categories_request.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app_requests/area_request.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -175,6 +179,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.area_request" />
         <item itemvalue="Python.main_requests" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.roles_request" />
@@ -245,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781176670206</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added exception handling">
+      <option name="closed" value="true" />
+      <created>1781181721825</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1781181721825</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -269,6 +282,7 @@
     <MESSAGE value="added test request, categories_request.py, roles_request.py" />
     <MESSAGE value="feat base endpoints" />
     <MESSAGE value="moved api requests to a separate file" />
-    <option name="LAST_COMMIT_MESSAGE" value="moved api requests to a separate file" />
+    <MESSAGE value="added exception handling" />
+    <option name="LAST_COMMIT_MESSAGE" value="added exception handling" />
   </component>
 </project>

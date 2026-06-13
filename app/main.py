@@ -3,8 +3,13 @@ from typing import Annotated
 
 from fastapi import FastAPI
 from pydantic import Field
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+from slowapi import _rate_limit_exceeded_handler
 
-from app_requests.main_requests import get_categories, get_roles_by_category_id
+from app_requests.main_requests import get_categories, get_roles_by_category_id, search_vacancies
+from models.params import SearchParams
 
 
 @asynccontextmanager
@@ -14,7 +19,7 @@ async def lifespan(app: FastAPI):
             {
                 "text": "search text",
                 "area": "search region",
-                "specialization": "specialization in vacancies",
+                "speciality": "specialization in vacancies",
                 "experience": "required work experience"
             },
         "pagination parameters": {
@@ -33,22 +38,35 @@ app = FastAPI(
     version="1.0.0"
 )
 
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["5/minute"]
+)
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 
 @app.get("/all_categories")
+@limiter.limit("5/minute")
 def show_all_categories():
     return get_categories()
 
 
 @app.get("/categories/{category_id}/show_roles")
-def show_roles(category_id: Annotated[str | None, Field(..., min_length=1, max_length=4, alias="11")]):
+@limiter.limit("5/minute")
+def show_roles(category_id: Annotated[str, Field(..., min_length=1, max_length=4,
+                                                 description="Category's id. You can get all categories with id by /all_categories endpoint")]):
     return get_roles_by_category_id(category_id)
 
 
 @app.get("/parameters")
+@limiter.limit("5/minute")
 def show_parameters():
     return app.state.acceptable_parameters
 
 
-@app.get("/search")
-def search():
-    pass
+@app.post("/search")
+@limiter.limit("5/minute")
+def search(params: SearchParams):
+    return search_vacancies(params)
