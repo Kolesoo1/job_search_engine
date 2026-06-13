@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="329beffe-f713-4e03-be1f-1abff529acdf" name="Changes" comment="added exception handling">
-      <change afterPath="$PROJECT_DIR$/app_requests/area_request.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/params.py" afterDir="false" />
+    <list default="true" id="329beffe-f713-4e03-be1f-1abff529acdf" name="Changes" comment="added limiter and main endpoint">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app_requests/main_requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/app_requests/main_requests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -258,7 +255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781181721825</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added limiter and main endpoint">
+      <option name="closed" value="true" />
+      <created>1781342014337</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1781342014337</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -283,6 +288,7 @@
     <MESSAGE value="feat base endpoints" />
     <MESSAGE value="moved api requests to a separate file" />
     <MESSAGE value="added exception handling" />
-    <option name="LAST_COMMIT_MESSAGE" value="added exception handling" />
+    <MESSAGE value="added limiter and main endpoint" />
+    <option name="LAST_COMMIT_MESSAGE" value="added limiter and main endpoint" />
   </component>
 </project>
