@@ -1,13 +1,11 @@
 import os
-from logging import exception
-
-from fastapi import HTTPException
 
 from anyio.functools import lru_cache
 from dotenv import load_dotenv
 
 import requests
 
+from handlers.hh_handler import handle_hh_errors
 from models.params import SearchParams
 
 load_dotenv()
@@ -19,109 +17,55 @@ headers = {
 
 
 @lru_cache(maxsize=1)
+@handle_hh_errors
 def get_areas():
-    try:
-        response = requests.get(f"{os.getenv('HH_BASE_URL')}/areas", headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        res_areas = {}
+    response = requests.get(f"{os.getenv('HH_BASE_URL')}/areas", headers=headers)
+    response.raise_for_status()
+    data = response.json()
+    res_areas = {}
 
-        for area_country_level in data:
-            res_area = {"name": area_country_level["name"]}
+    for area_country_level in data:
+        res_area = {"name": area_country_level["name"]}
+        areas = area_country_level["areas"]
+        regions = {region["id"]: region["name"] for region in areas}
+        res_area["regions"] = regions
+        res_areas[area_country_level["id"]] = res_area
 
-            areas = area_country_level["areas"]
-            regions = {}
-
-            for region in areas:
-                regions[region["id"]] = region["name"]
-            res_area["regions"] = regions
-
-            res_areas[area_country_level["id"]] = res_area
-
-        return res_areas
-    except requests.exceptions.Timeout:
-        raise HTTPException(504)
-    except requests.exceptions.ConnectionError:
-        raise HTTPException(503)
-    except requests.exceptions.HTTPError as e:
-        status = e.response.status_code
-        if status == 429:
-            raise HTTPException(429, "Слишком много запросов, попробуйте позже")
-        elif status == 404:
-            raise HTTPException(404, "Ресурс не найден")
-        else:
-            raise HTTPException(502, f"Внешний сервис вернул ошибку {status}")
+    return res_areas
 
 
 @lru_cache(maxsize=1)
+@handle_hh_errors
 def get_categories():
-    try:
-        response = requests.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        categories = {}
-
-        for cat_dict in data["categories"]:
-            categories[cat_dict['id']] = cat_dict['name']
-        return categories
-    except requests.exceptions.Timeout:
-        raise HTTPException(504, "External service is not responding (timeout)")
-    except requests.exceptions.ConnectionError:
-        raise HTTPException(503, "The service is temporarily unavailable (connection error)")
-    except requests.exceptions.HTTPError as e:
-        status = e.response.status_code
-        if status == 429:
-            raise HTTPException(429, "Слишком много запросов, попробуйте позже")
-        elif status == 404:
-            raise HTTPException(404, "Ресурс не найден")
-        else:
-            raise HTTPException(502, f"Внешний сервис вернул ошибку {status}")
+    response = requests.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
+    response.raise_for_status()
+    data = response.json()
+    return {cat_dict['id']: cat_dict['name'] for cat_dict in data["categories"]}
 
 
 @lru_cache(maxsize=50)
+@handle_hh_errors
 def get_roles_by_category_id(category_id: str):
-    try:
-        response = requests.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        roles = {}
+    response = requests.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
+    response.raise_for_status()
+    data = response.json()
+    roles = {}
 
-        for cat_dict in data["categories"]:
-            if category_id == cat_dict["id"]:
-                for role in cat_dict["roles"]:
-                    roles[role["id"]] = role["name"]
-            else:
-                continue
+    for cat_dict in data["categories"]:
+        if category_id == cat_dict["id"]:
+            for role in cat_dict["roles"]:
+                roles[role["id"]] = role["name"]
+            break
 
-        return roles
-    except requests.exceptions.Timeout:
-        raise HTTPException(504, "External service is not responding (timeout)")
-    except requests.exceptions.ConnectionError:
-        raise HTTPException(503, "The service is temporarily unavailable (connection error)")
-    except requests.exceptions.HTTPError as e:
-        status = e.response.status_code
-        if status == 429:
-            raise HTTPException(429, "Слишком много запросов, попробуйте позже")
-        elif status == 404:
-            raise HTTPException(404, "Ресурс не найден")
-        else:
-            raise HTTPException(502, f"Внешний сервис вернул ошибку {status}")
+    return roles
 
 
+@handle_hh_errors
 def search_vacancies(params: SearchParams):
-    try:
-        response = requests.get(f"{os.getenv('HH_BASE_URL')}/vacancies", params=params.model_dump(), headers=headers)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.Timeout:
-        raise HTTPException(504, "External service is not responding (timeout)")
-    except requests.exceptions.ConnectionError:
-        raise HTTPException(503, "The service is temporarily unavailable (connection error)")
-    except requests.exceptions.HTTPError as e:
-        status = e.response.status_code
-        if status == 429:
-            raise HTTPException(429, "Слишком много запросов, попробуйте позже")
-        elif status == 404:
-            raise HTTPException(404, "Ресурс не найден")
-        else:
-            raise HTTPException(502, f"Внешний сервис вернул ошибку {status}")
+    response = requests.get(
+        f"{os.getenv('HH_BASE_URL')}/vacancies",
+        params=params.model_dump(),
+        headers=headers
+    )
+    response.raise_for_status()
+    return response.json()
