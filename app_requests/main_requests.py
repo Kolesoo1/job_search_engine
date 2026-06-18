@@ -1,10 +1,9 @@
 import os
 
-from anyio.functools import lru_cache
+from async_lru import alru_cache
 from dotenv import load_dotenv
 
-import requests
-
+from app.client import get_client
 from handlers.hh_handler import handle_hh_errors
 from models.params import SearchParams
 
@@ -16,10 +15,11 @@ headers = {
 }
 
 
-@lru_cache(maxsize=1)
+@alru_cache(maxsize=1)
 @handle_hh_errors
-def get_areas():
-    response = requests.get(f"{os.getenv('HH_BASE_URL')}/areas", headers=headers)
+async def get_areas():
+    client = get_client()
+    response = await client.get(f"{os.getenv('HH_BASE_URL')}/areas", headers=headers)
     response.raise_for_status()
     data = response.json()
     res_areas = {}
@@ -34,19 +34,21 @@ def get_areas():
     return res_areas
 
 
-@lru_cache(maxsize=1)
+@alru_cache(maxsize=1)
 @handle_hh_errors
-def get_categories():
-    response = requests.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
+async def get_categories():
+    client = get_client()
+    response = await client.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
     response.raise_for_status()
     data = response.json()
     return {cat_dict['id']: cat_dict['name'] for cat_dict in data["categories"]}
 
 
-@lru_cache(maxsize=50)
+@alru_cache(maxsize=50)
 @handle_hh_errors
-def get_roles_by_category_id(category_id: str):
-    response = requests.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
+async def get_roles_by_category_id(category_id: str):
+    client = get_client()
+    response = await client.get(f"{os.getenv('HH_BASE_URL')}/professional_roles", headers=headers)
     response.raise_for_status()
     data = response.json()
     roles = {}
@@ -61,8 +63,9 @@ def get_roles_by_category_id(category_id: str):
 
 
 @handle_hh_errors
-def search_vacancies(params: SearchParams):
-    response = requests.get(
+async def search_vacancies(params: SearchParams):
+    client = get_client()
+    response = await client.get(
         f"{os.getenv('HH_BASE_URL')}/vacancies",
         params=params.model_dump(),
         headers=headers

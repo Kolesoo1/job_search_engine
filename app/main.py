@@ -1,7 +1,10 @@
 import io
+import os
 from contextlib import asynccontextmanager
 from typing import Annotated, cast
 
+import httpx
+from dotenv import load_dotenv
 from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, Request, HTTPException, status
 from pydantic import Field
@@ -11,12 +14,26 @@ from slowapi.util import get_remote_address
 from slowapi import _rate_limit_exceeded_handler
 import pandas as pd
 
+from app.client import set_client
 from app_requests.main_requests import get_categories, get_roles_by_category_id, search_vacancies, get_areas
 from models.params import SearchParams
+
+load_dotenv()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    client = httpx.AsyncClient(
+        timeout=30.0,
+        limits=httpx.Limits(
+            max_keepalive_connections=20,
+            max_connections=100
+        ),
+        headers={"User-Agent": os.getenv('HH_USER_AGENT')}  # общие заголовки
+    )
+    set_client(client)
+    app.state.http_client = client
+
     app.state.acceptable_parameters = {
         "search parameters":
             {
@@ -32,12 +49,14 @@ async def lifespan(app: FastAPI):
     }
     yield
     app.state.acceptable_parameters = None
+    await app.state.http_client.aclose()
 
 
 app = FastAPI(
     title="JobSearchEngine",
     description="API that will help you with job search on HeadHunter",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 limiter = Limiter(
@@ -52,13 +71,13 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @app.get("/all_categories")
 @limiter.limit("5/minute")
 async def show_all_categories(request: Request):
-    return get_categories()
+    return await get_categories()
 
 
 @app.get("/areas")
 @limiter.limit("55/minute")
 async def show_areas(request: Request):
-    return get_areas()
+    return await get_areas()
 
 
 @app.get("/categories/{category_id}/show_roles")
@@ -68,7 +87,7 @@ async def show_roles(request: Request, category_id: Annotated[str, Field(..., mi
     roles = get_roles_by_category_id(category_id)
     if not roles:
         raise HTTPException(status_code=404, detail="Category not found")
-    return roles
+    return await roles
 
 
 @app.get("/parameters")
@@ -80,7 +99,7 @@ async def show_parameters(request: Request):
 @app.post("/search")
 @limiter.limit("5/minute")
 async def search(request: Request, params: SearchParams):
-    data = search_vacancies(params)
+    data = await search_vacancies(params)
     df = pd.DataFrame(
         columns=["name", "salaries_from", "salaries_to", "salaries_frequency", "url", "employer",
                  "employer_url",

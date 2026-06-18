@@ -2,11 +2,12 @@ from functools import wraps
 import requests
 from fastapi import HTTPException
 
+
 def handle_hh_errors(func):
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    async def wrapper(*args, **kwargs):
         try:
-            return func(*args, **kwargs)
+            return await func(*args, **kwargs)
         except requests.exceptions.Timeout:
             raise HTTPException(504, "External service is not responding (timeout)")
         except requests.exceptions.ConnectionError:
@@ -19,4 +20,5 @@ def handle_hh_errors(func):
                 raise HTTPException(404, "Ресурс не найден")
             else:
                 raise HTTPException(502, f"Внешний сервис вернул ошибку {status}")
+
     return wrapper
